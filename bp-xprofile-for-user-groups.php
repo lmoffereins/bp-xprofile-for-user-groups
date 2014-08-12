@@ -10,7 +10,7 @@
  *
  * @todo Field visibility status: 'This field can be seen by everyone' is not true
  *        for fields that are assigned to user groups (or for their fieldgroup)
- * @todo Support BP_Group_Hierarchy
+ * @todo Support BP Group Hierarchy
  */
 
 /**

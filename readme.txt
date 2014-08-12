@@ -25,7 +25,8 @@ In development:
 
 1. Place the 'bp-xprofile-for-user-groups' folder in your '/wp-content/plugins/' directory.
 2. Activate BP XProfile For User Groups.
-3. Visit the Profile Fields screen to assign BuddyPress profile field(group)s to user groups.
+3. Visit the Profile Fields screen of Buddypress.
+4. Edit a single field group or field to assign user groups to them.
 
 == Changelog ==
 
