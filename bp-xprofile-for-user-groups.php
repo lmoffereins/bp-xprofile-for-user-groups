@@ -46,13 +46,11 @@ class BP_XProfile_For_User_Groups {
 	 */
 	public function __construct() {
 
-		// Fields
+		// Fields & fieldgroup filters
 		add_filter( 'bp_xprofile_get_hidden_fields_for_user', array( $this, 'filter_hidden_fields' ), 10, 3 );
+		add_filter( 'bp_xprofile_get_groups',                 array( $this, 'filter_fieldgroups'   ), 10, 2 );
 
-		// Fieldgroups
-		add_filter( 'bp_xprofile_get_groups', array( $this, 'filter_fieldgroups' ), 10, 2 );
-
-		// Handle metaboxes
+		// Handle xprofile meta
 		add_action( 'xprofile_group_after_submitbox', array( $this, 'fieldgroup_display_metabox' ) );
 		add_action( 'xprofile_group_after_save',      array( $this, 'fieldgroup_save_metabox'    ) );
 		add_action( 'xprofile_field_after_submitbox', array( $this, 'field_display_metabox'      ) );
@@ -230,7 +228,7 @@ class BP_XProfile_For_User_Groups {
 		if ( empty( $user_id ) )
 			$user_id = bp_displayed_user_id();
 
-		// Get user's memberships
+		// Get user's memberships limited to fieldgroup's user groups
 		$groups = groups_get_groups( array( 
 			'user_id'         => $user_id, 
 			'include'         => $this->get_fieldgroup_user_groups( $fieldgroup_id ), 
@@ -287,7 +285,7 @@ class BP_XProfile_For_User_Groups {
 		if ( is_object( $field_id ) )
 			$field_id = $field_id->id;
 
-		// Get user's memberships
+		// Get user's memberships limited to field's user groups
 		$groups = groups_get_groups( array( 
 			'user_id'         => $user_id, 
 			'include'         => $this->get_field_user_groups( $field_id ),
@@ -307,7 +305,7 @@ class BP_XProfile_For_User_Groups {
 	 * @since 1.0.0
 	 * 
 	 * @param int $fieldgroup_id Fieldgroup ID
-	 * @return array Field group user group ids
+	 * @return array Fieldgroup user group ids
 	 */
 	public function get_fieldgroup_user_groups( $fieldgroup_id ) {
 		$meta = bp_xprofile_get_meta( $fieldgroup_id, 'group', 'for-user-groups' );
@@ -565,13 +563,14 @@ class BP_XProfile_For_User_Groups {
  * Initiate plugin class
  *
  * @since 1.0.0
- * 
+ *
+ * @uses bp_is_active()
  * @uses BP_XProfile_For_User_Groups
  */
 function bp_xprofile_for_user_groups() {
 
-	// Bail if groups component is not active
-	if ( ! bp_is_active( 'groups' ) )
+	// Bail if groups or xprofile component is not active
+	if ( ! bp_is_active( 'groups' ) || ! bp_is_active( 'xprofile' ) )
 		return;
 
 	new BP_XProfile_For_User_Groups;
