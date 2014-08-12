@@ -2,7 +2,9 @@
 
 /**
  * The BP XProfile For User Groups Plugin
- * 
+ *
+ * Requires BP 2.1+
+ *  
  * @package BP XProfile For User Groups
  * @subpackage Main
  *
@@ -12,14 +14,15 @@
  */
 
 /**
- * Plugin Name: BP XProfile For User Groups 
- * Description: Manage user group specific profile field(group)s in BuddyPress
- * Plugin URI:  https://github.com/lmoffereins/bp-xprofile-for-user-groups
- * Version:     1.0.0
- * Author:      Laurens Offereins
- * Author URI:  https://github.com/lmoffereins
- * Text Domain: bp-xprofile-for-user-groups
- * Domain Path: /languages/
+ * Plugin Name:       BP XProfile For User Groups 
+ * Description:       Manage user group specific profile field(group)s in BuddyPress
+ * Plugin URI:        https://github.com/lmoffereins/bp-xprofile-for-user-groups
+ * Version:           1.0.0
+ * Author:            Laurens Offereins
+ * Author URI:        https://github.com/lmoffereins
+ * Text Domain:       bp-xprofile-for-user-groups
+ * Domain Path:       /languages/
+ * GitHub Plugin URI: lmoffereins/bp-xprofile-for-user-groups
  */
 
 // Exit if accessed directly
