@@ -3,7 +3,7 @@ Contributors: Offereins
 Tags: buddypress, groups, xprofile, profile, field, group
 Requires at least: 3.8, BP 2.1
 Tested up to: 3.9
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,9 @@ In development:
 4. Edit a single field group or field to assign user groups to them.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fixed bug with filtering field(group)s in Extended Profile admin page
 
 = 1.0.0 =
 * Initial release
