@@ -87,13 +87,13 @@ class BP_XProfile_For_User_Groups {
 			foreach ( $all_fields as $k => $field_id ) {
 
 				// Is displayed user not a member? Remove field
-				if ( ! $this->is_user_field_member( $field_id, bp_displayed_user_id() ) ) {
+				if ( ! $this->is_user_field_member( $field_id, $displayed_user_id ) ) {
 					$hidden_fields[] = $field_id;
 					continue;
 				}
 
 				// Is loggedin user not an admin and not a member? Hide field
-				if ( ! bp_current_user_can( 'bp_moderate' ) && ! $this->is_user_field_member( $field_id, bp_loggedin_user_id() ) ) {
+				if ( ! bp_current_user_can( 'bp_moderate' ) && ! $this->is_user_field_member( $field_id, $current_user_id ) ) {
 					$hidden_fields[] = $field_id;
 					continue;
 				}
@@ -129,7 +129,7 @@ class BP_XProfile_For_User_Groups {
 					// Fieldgroup
 					case 'group' :
 
-						// Get fieldgroup's fields
+						// Get fieldgroup's field ids
 						$fields = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->profile->table_name_fields} WHERE group_id = %d", $item->object_id ) );
 
 						// Hide all its fields
@@ -185,7 +185,7 @@ class BP_XProfile_For_User_Groups {
 				continue;
 
 			// Is displayed user not a member? Remove fieldgroup
-			if ( ! $this->is_user_fieldgroup_member( $group->id, bp_displayed_user_id() ) ) {
+			if ( ! $this->is_user_fieldgroup_member( $group->id, isset( $args['user_id'] ) ? $args['user_id'] : bp_displayed_user_id() ) ) {
 				unset( $groups[$k] );
 				continue;
 			}
@@ -225,8 +225,9 @@ class BP_XProfile_For_User_Groups {
 			return true;
 
 		// Default to displayed user
-		if ( empty( $user_id ) )
+		if ( ! is_numeric( $user_id ) ) {
 			$user_id = bp_displayed_user_id();
+		}
 
 		// Get user's memberships limited to fieldgroup's user groups
 		$groups = groups_get_groups( array( 
@@ -262,8 +263,9 @@ class BP_XProfile_For_User_Groups {
 			return true;
 
 		// Default to displayed user
-		if ( empty( $user_id ) )
+		if ( ! is_numeric( $user_id ) ) {
 			$user_id = bp_displayed_user_id();
+		}
 
 		// Check parent fieldgroup membership
 		if ( true === $check_fieldgroup ) {
