@@ -3,8 +3,8 @@
 /**
  * The BP XProfile For User Groups Plugin
  *
- * Requires BP 2.1+
- *  
+ * Requires BP 2.1
+ *
  * @package BP XProfile For User Groups
  * @subpackage Main
  *
@@ -14,7 +14,7 @@
  */
 
 /**
- * Plugin Name:       BP XProfile For User Groups 
+ * Plugin Name:       BP XProfile For User Groups
  * Description:       Manage user group specific profile field(group)s in BuddyPress
  * Plugin URI:        https://github.com/lmoffereins/bp-xprofile-for-user-groups
  * Version:           1.0.1
@@ -38,7 +38,7 @@ class BP_XProfile_For_User_Groups {
 
 	/**
 	 * Setup plugin structure and hooks
-	 * 
+	 *
 	 * @since 1.0.0
 	 *
 	 * @uses add_filter()
@@ -59,15 +59,15 @@ class BP_XProfile_For_User_Groups {
 	}
 
 	/** Field & Fieldgroup Filters ********************************************/
-	
+
 	/**
 	 * Return the field ids that are not visible for the displayed and current user
 	 *
-	 * First, the displayed user must be a member of both the fieldgroup's and the 
-	 * field's user groups in order to show the field. Second, the loggedin user 
-	 * must be a member of both to show the field. If either one fails the user 
+	 * First, the displayed user must be a member of both the fieldgroup's and the
+	 * field's user groups in order to show the field. Second, the loggedin user
+	 * must be a member of both to show the field. If either one fails the user
 	 * group membership, the field is added to the hidden fields collection.
-	 * 
+	 *
 	 * @since 1.0.0
 	 *
 	 * @param array $hidden_fields Hidden field ids
@@ -83,7 +83,7 @@ class BP_XProfile_For_User_Groups {
 
 			// Hidden = All - Visible for displayed user AND current user
 			$all_fields = array_map( 'intval', (array) $wpdb->get_col( "SELECT id FROM {$bp->profile->table_name_fields}" ) );
-			
+
 			foreach ( $all_fields as $k => $field_id ) {
 
 				// Is displayed user not a member? Remove field
@@ -162,15 +162,15 @@ class BP_XProfile_For_User_Groups {
 	 * First, the displayed user must be a member to show the fieldgroup. Second,
 	 * the loggedin user must be a member to show the fieldgroup. If either one
 	 * fails the fieldgroup's user group membership, it's removed.
-	 * 
+	 *
 	 * Since BP 2.1.0.
-	 * 
+	 *
 	 * @since 1.0.0
 	 *
 	 * @uses BP_XProfile_For_User_Groups::is_user_fieldgroup_member()
 	 * @uses bp_displayed_user_id()
 	 * @uses bp_loggedin_user_id()
-	 * 
+	 *
 	 * @param array $groups Fieldgroup objects
 	 * @param array $args Query arguments
 	 * @return array Field groups
@@ -209,7 +209,7 @@ class BP_XProfile_For_User_Groups {
 	 * Return whether the user is member of the fieldgroup's user groups
 	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @uses bp_displayed_user_id()
 	 * @uses groups_get_groups()
 	 * @uses BP_XProfile_For_User_Groups::get_fieldgroup_user_groups()
@@ -230,9 +230,9 @@ class BP_XProfile_For_User_Groups {
 		}
 
 		// Get user's memberships limited to fieldgroup's user groups
-		$groups = groups_get_groups( array( 
-			'user_id'         => $user_id, 
-			'include'         => $this->get_fieldgroup_user_groups( $fieldgroup_id ), 
+		$groups = groups_get_groups( array(
+			'user_id'         => $user_id,
+			'include'         => $this->get_fieldgroup_user_groups( $fieldgroup_id ),
 			'show_hidden'     => true,
 			'per_page'        => false,
 			'populate_extras' => false,
@@ -288,14 +288,14 @@ class BP_XProfile_For_User_Groups {
 			$field_id = $field_id->id;
 
 		// Get user's memberships limited to field's user groups
-		$groups = groups_get_groups( array( 
-			'user_id'         => $user_id, 
+		$groups = groups_get_groups( array(
+			'user_id'         => $user_id,
 			'include'         => $this->get_field_user_groups( $field_id ),
 			'show_hidden'     => true,
 			'per_page'        => false,
 			'populate_extras' => false,
 		) );
-		
+
 		return (bool) $groups['groups'];
 	}
 
@@ -305,14 +305,14 @@ class BP_XProfile_For_User_Groups {
 	 * Return the xprofile fieldgroup assigned user groups
 	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @param int $fieldgroup_id Fieldgroup ID
 	 * @return array Fieldgroup user group ids
 	 */
 	public function get_fieldgroup_user_groups( $fieldgroup_id ) {
 		$meta = bp_xprofile_get_meta( $fieldgroup_id, 'group', 'for-user-groups' );
 
-		// Sanitize meta		
+		// Sanitize meta
 		if ( empty( $meta ) )
 			$meta = array();
 
@@ -323,14 +323,14 @@ class BP_XProfile_For_User_Groups {
 	 * Return the xprofile field assigned user groups
 	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @param int $field_id Field ID
 	 * @return array Field user field ids
 	 */
 	public function get_field_user_groups( $field_id ) {
 		$meta = bp_xprofile_get_meta( $field_id, 'field', 'for-user-groups' );
 
-		// Sanitize meta		
+		// Sanitize meta
 		if ( empty( $meta ) )
 			$meta = array();
 
@@ -357,7 +357,7 @@ class BP_XProfile_For_User_Groups {
 
 	/**
 	 * Update the field's user groups meta value
-	 * 
+	 *
 	 * @since 1.0.0
 	 *
 	 * @uses bp_xprofile_update_field_meta()
@@ -379,12 +379,12 @@ class BP_XProfile_For_User_Groups {
 	 * Output the metabox for fieldgroup assigned user groups
 	 *
 	 * Since BP 2.1.0.
-	 * 
+	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @param BP_XProfile_Group $fieldgroup Current xprofile fieldgroup
 	 */
-	public function fieldgroup_display_metabox( $fieldgroup ) { 
+	public function fieldgroup_display_metabox( $fieldgroup ) {
 
 		// The primary fieldgroup cannot is for all, so bail
 		if ( 1 == $fieldgroup->id )
@@ -427,7 +427,7 @@ class BP_XProfile_For_User_Groups {
 	 * Save the metabox for fieldgroup assigned user groups
 	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @param BP_XProfile_Group $fieldgroup Saved xprofile group
 	 */
 	public function fieldgroup_save_metabox( $fieldgroup ) {
@@ -458,12 +458,12 @@ class BP_XProfile_For_User_Groups {
 	 * Output the metabox for field assigned user groups
 	 *
 	 * Since BP 2.1.0.
-	 * 
+	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @param BP_XProfile_Field $field Current xprofile field
 	 */
-	public function field_display_metabox( $field ) { 
+	public function field_display_metabox( $field ) {
 
 		// Field 1 is the fullname field, which cannot be un-assigned
 		if ( 1 == $field->id )
@@ -509,7 +509,7 @@ class BP_XProfile_For_User_Groups {
 	 * Save the metabox for field assigned user groups
 	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @param BP_XProfile_Field $field Saved xprofile field
 	 */
 	public function field_save_metabox( $field ) {
@@ -541,7 +541,7 @@ class BP_XProfile_For_User_Groups {
 	 *
 	 * @since 1.0.0
 	 */
-	public function print_styles() { 
+	public function print_styles() {
 
 		// Bail when this is not an xprofile admin page
 		if ( ! isset( get_current_screen()->id ) || 'users_page_bp-profile-setup' != get_current_screen()->id )

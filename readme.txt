@@ -11,9 +11,7 @@ Assign BP's profile field(group)s to user groups
 
 == Description ==
 
-Assign user groups to Buddypress's profile field groups and fields. Only members of
-assigned user groups get the field(group)s displayed for data input and only members
-can view each other's profile fields values.
+Assign user groups to Buddypress's profile field groups and fields. Only members of assigned user groups get the field(group)s displayed for data input and only members can view each other's profile fields values.
 
 This plugin requires BP 2.1 to be functional!
 
