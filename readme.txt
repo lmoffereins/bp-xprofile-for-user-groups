@@ -30,7 +30,7 @@ In development:
 
 = 1.0.1 =
 * Fixed bug with filtering field(group)s in Extended Profile admin page
-* New: toggle metabox information
+* Added metabox information toggler
 
 = 1.0.0 =
 * Initial release
