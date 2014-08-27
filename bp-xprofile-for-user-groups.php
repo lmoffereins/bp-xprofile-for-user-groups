@@ -404,9 +404,11 @@ class BP_XProfile_For_User_Groups {
 		$assgnd = ! empty( $fieldgroup->id ) ? $this->get_fieldgroup_user_groups( $fieldgroup->id ) : array(); ?>
 
 		<div id="for_user_groups" class="postbox">
-			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?></h3>
+			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
 			<div class="inside">
-				<p><?php _e( 'Assign user groups to the profile field group to limit its applicability to the members of that group.', 'bp-xprofile-for-user-groups' ); ?></p>
+				<p class="metabox-info">
+					<?php _e( 'Assign user groups to the profile field group to limit its applicability to the members of that group.', 'bp-xprofile-for-user-groups' ); ?>
+				</p>
 
 				<ul class="user_groups">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
@@ -484,9 +486,9 @@ class BP_XProfile_For_User_Groups {
 		$assgnd = ! empty( $field->id ) ? $this->get_field_user_groups( $field->id ) : array(); ?>
 
 		<div id="for_user_groups" class="postbox">
-			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?></h3>
+			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
 			<div class="inside">
-				<p>
+				<p class="metabox-info">
 					<?php _e( 'Assign user groups to the profile field to limit its applicability to the members of that group. Selectable groups are limited to the ones assigned to the parent field group.', 'bp-xprofile-for-user-groups' ); ?>
 				</p>
 
@@ -537,6 +539,15 @@ class BP_XProfile_For_User_Groups {
 	}
 
 	/**
+	 * Output the metabox information toggle button
+	 *
+	 * @since 1.0.1
+	 */
+	public function the_info_toggler() {
+		printf( '<i class="dashicons-before dashicons-info" title="%s"></i>', __( 'Toggle metabox information', 'bp-xprofile-for-user-groups' ) );
+	}
+
+	/**
 	 * Output specific metabox styles for the xprofile admin
 	 *
 	 * @since 1.0.0
@@ -550,12 +561,39 @@ class BP_XProfile_For_User_Groups {
 		<style type="text/css">
 			#for_user_groups .inside ul.user_groups {
 				padding: 2px 5px 0;
-				margin: 0;
+				margin: 1em 0 0 0;
 				border: 1px solid #ddd;
 				height: 12em;
 				overflow-y: scroll;
 			}
+
+			#for_user_groups .inside .metabox-info:visible + ul.user_groups {
+				margin: 0;
+			}
+
+			#for_user_groups .inside .metabox-info {
+				display: none;
+			}
+
+			#for_user_groups i.dashicons-info {
+				float: right;
+				cursor: pointer;
+				color: #444;
+			}
+				#for_user_groups i.dashicons-info:hover {
+					color: #000;
+				}
 		</style>
+
+		<script type="text/javascript">
+			// Toggle metabox information
+			jQuery('document').ready( function( $ ) {
+				var $box = $('#for_user_groups');
+				$box.on( 'click', 'i.dashicons-info', function() {
+					$box.find( 'p.metabox-info' ).toggle();
+				});
+			});
+		</script>
 
 		<?php
 	}
