@@ -400,8 +400,10 @@ class BP_XProfile_For_User_Groups {
 		);
 
 		// Get all and assigned user groups
-		$groups = groups_get_groups( $args );
-		$assgnd = ! empty( $fieldgroup->id ) ? $this->get_fieldgroup_user_groups( $fieldgroup->id ) : array(); ?>
+		$groups  = groups_get_groups( $args );
+		$class   = array( 'user_groups' );
+		$class[] = count( $groups['groups'] ) > 6 ? 'scroll' : '';
+		$assgnd  = ! empty( $fieldgroup->id ) ? $this->get_fieldgroup_user_groups( $fieldgroup->id ) : array(); ?>
 
 		<div id="for_user_groups" class="postbox">
 			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
@@ -410,7 +412,7 @@ class BP_XProfile_For_User_Groups {
 					<?php _e( 'Assign user groups to the profile field group to limit its applicability to the members of that group.', 'bp-xprofile-for-user-groups' ); ?>
 				</p>
 
-				<ul class="user_groups">
+				<ul class="<?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
 					<li><label><input name="for-user-groups[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $assgnd ) ); ?> /> <?php echo $group->name; ?></label></li>
@@ -483,6 +485,8 @@ class BP_XProfile_For_User_Groups {
 
 		// Get all and assigned user groups
 		$groups = groups_get_groups( $args );
+		$class   = array( 'user_groups' );
+		$class[] = count( $groups['groups'] ) > 6 ? 'scroll' : '';
 		$assgnd = ! empty( $field->id ) ? $this->get_field_user_groups( $field->id ) : array(); ?>
 
 		<div id="for_user_groups" class="postbox">
@@ -492,7 +496,7 @@ class BP_XProfile_For_User_Groups {
 					<?php _e( 'Assign user groups to the profile field to limit its applicability to the members of that group. Selectable groups are limited to the ones assigned to the parent field group.', 'bp-xprofile-for-user-groups' ); ?>
 				</p>
 
-				<ul class="user_groups">
+				<ul class="<?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
 					<li><label><input name="for-user-groups[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $assgnd ) ); ?> /> <?php echo $group->name; ?></label></li>
@@ -559,7 +563,7 @@ class BP_XProfile_For_User_Groups {
 			return; ?>
 
 		<style type="text/css">
-			#for_user_groups .inside ul.user_groups {
+			#for_user_groups .inside ul.user_groups.scroll {
 				padding: 2px 5px 0;
 				margin: 1em 0 0 0;
 				border: 1px solid #ddd;
@@ -567,7 +571,7 @@ class BP_XProfile_For_User_Groups {
 				overflow-y: scroll;
 			}
 
-			#for_user_groups .inside .metabox-info:visible + ul.user_groups {
+			#for_user_groups .inside .metabox-info:visible + ul.user_groups.scroll {
 				margin: 0;
 			}
 
