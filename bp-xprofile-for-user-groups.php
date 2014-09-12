@@ -298,16 +298,27 @@ class BP_XProfile_For_User_Groups {
 		if ( is_object( $field_id ) )
 			$field_id = $field_id->id;
 
-		// Get user's memberships limited to field's user groups
-		$groups = groups_get_groups( array(
-			'user_id'         => $user_id,
-			'include'         => $this->get_field_user_groups( $field_id ),
-			'show_hidden'     => true,
-			'per_page'        => false,
-			'populate_extras' => false,
-		) );
+		// Get fieldgroups' group ids
+		$group_ids = $this->get_field_user_groups( $field_id );
 
-		return (bool) $groups['groups'];
+		// Groups are assigned
+		if ( ! empty( $group_ids ) ) {
+
+			// Get user's memberships limited to field's user groups
+			$groups = groups_get_groups( array(
+				'user_id'         => $user_id,
+				'include'         => $this->get_field_user_groups( $field_id ),
+				'show_hidden'     => true,
+				'per_page'        => false,
+				'populate_extras' => false,
+			) );
+
+			return (bool) $groups['groups'];
+
+		// No groups were assigned, so user has access
+		} else {
+			return true;
+		}
 	}
 
 	/** Get/Update ************************************************************/
