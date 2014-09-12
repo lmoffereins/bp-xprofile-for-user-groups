@@ -270,7 +270,7 @@ class BP_XProfile_For_User_Groups {
 	public function is_user_field_member( $field_id, $user_id = 0, $check_fieldgroup = true ) {
 
 		// Bail if this is the primary field
-		if ( 1 == $field_id )
+		if ( 1 == $field_id || ( is_object( $field_id ) && 1 == $field_id->id ) )
 			return true;
 
 		// Default to displayed user
