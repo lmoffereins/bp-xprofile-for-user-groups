@@ -212,7 +212,7 @@ class BP_XProfile_For_User_Groups {
 	 *
 	 * @uses bp_displayed_user_id()
 	 * @uses groups_get_groups()
-	 * @uses BP_XProfile_For_User_Groups::get_fieldgroup_user_groups()
+	 * @uses BP_XProfile_For_User_Groups::get_fieldgroup_user_groups_having()
 	 *
 	 * @param int $fieldgroup_id Field group ID
 	 * @param int $user_id Optional. User ID. Defaults to the displayed user.
@@ -230,7 +230,7 @@ class BP_XProfile_For_User_Groups {
 		}
 
 		// Get fieldgroups' group ids
-		$group_ids = $this->get_fieldgroup_user_groups( $fieldgroup_id );
+		$group_ids = $this->get_fieldgroup_user_groups_having( $fieldgroup_id );
 
 		// Groups are assigned
 		if ( ! empty( $group_ids ) ) {
@@ -260,7 +260,7 @@ class BP_XProfile_For_User_Groups {
 	 * @uses bp_displayed_user_id()
 	 * @uses BP_XProfile_For_User_Groups::is_user_fieldgroup_member()
 	 * @uses groups_get_groups()
-	 * @uses BP_XProfile_For_User_Groups::get_field_user_groups()
+	 * @uses BP_XProfile_For_User_Groups::get_field_user_groups_having()
 	 *
 	 * @param int $fieldgroup_id Field group ID
 	 * @param int $user_id Optional. User ID. Defaults to the displayed user.
@@ -299,7 +299,7 @@ class BP_XProfile_For_User_Groups {
 			$field_id = $field_id->id;
 
 		// Get fieldgroups' group ids
-		$group_ids = $this->get_field_user_groups( $field_id );
+		$group_ids = $this->get_field_user_groups_having( $field_id );
 
 		// Groups are assigned
 		if ( ! empty( $group_ids ) ) {
@@ -307,7 +307,7 @@ class BP_XProfile_For_User_Groups {
 			// Get user's memberships limited to field's user groups
 			$groups = groups_get_groups( array(
 				'user_id'         => $user_id,
-				'include'         => $this->get_field_user_groups( $field_id ),
+				'include'         => $this->get_field_user_groups_having( $field_id ),
 				'show_hidden'     => true,
 				'per_page'        => false,
 				'populate_extras' => false,
@@ -331,7 +331,7 @@ class BP_XProfile_For_User_Groups {
 	 * @param int $fieldgroup_id Fieldgroup ID
 	 * @return array Fieldgroup user group ids
 	 */
-	public function get_fieldgroup_user_groups( $fieldgroup_id ) {
+	public function get_fieldgroup_user_groups_having( $fieldgroup_id ) {
 		$meta = bp_xprofile_get_meta( $fieldgroup_id, 'group', 'for-user-groups' );
 
 		// Sanitize meta
@@ -349,7 +349,7 @@ class BP_XProfile_For_User_Groups {
 	 * @param int $field_id Field ID
 	 * @return array Field user field ids
 	 */
-	public function get_field_user_groups( $field_id ) {
+	public function get_field_user_groups_having( $field_id ) {
 		$meta = bp_xprofile_get_meta( $field_id, 'field', 'for-user-groups' );
 
 		// Sanitize meta
@@ -368,7 +368,7 @@ class BP_XProfile_For_User_Groups {
 	 * @param int $fieldgroup_id Fieldgroup ID
 	 * @param array $groups Assigned user group ids
 	 */
-	public function update_fieldgroup_user_groups( $fieldgroup_id, $groups ) {
+	public function update_fieldgroup_user_groups_having( $fieldgroup_id, $groups ) {
 
 		// Sanitize input
 		$groups = array_map( 'intval', (array) $groups );
@@ -386,7 +386,7 @@ class BP_XProfile_For_User_Groups {
 	 * @param int $field_id Field ID
 	 * @param array $groups Assigned user group ids
 	 */
-	public function update_field_user_groups( $field_id, $groups ) {
+	public function update_field_user_groups_having( $field_id, $groups ) {
 
 		// Sanitize input
 		$groups = array_map( 'intval', (array) $groups );
@@ -408,7 +408,7 @@ class BP_XProfile_For_User_Groups {
 	 */
 	public function fieldgroup_display_metabox( $fieldgroup ) {
 
-		// The primary fieldgroup cannot is for all, so bail
+		// The primary fieldgroup is for all, so bail
 		if ( 1 == $fieldgroup->id )
 			return;
 
@@ -421,11 +421,11 @@ class BP_XProfile_For_User_Groups {
 			'populate_extras' => false,
 		);
 
-		// Get all and assigned user groups
+		// Get all, having and showing user groups
 		$groups  = groups_get_groups( $args );
 		$class   = array( 'user_groups' );
 		$class[] = count( $groups['groups'] ) > 6 ? 'scroll' : '';
-		$assgnd  = ! empty( $fieldgroup->id ) ? $this->get_fieldgroup_user_groups( $fieldgroup->id ) : array(); ?>
+		$having  = ! empty( $fieldgroup->id ) ? $this->get_fieldgroup_user_groups_having(  $fieldgroup->id ) : array(); ?>
 
 		<div id="for_user_groups" class="postbox">
 			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
@@ -437,7 +437,7 @@ class BP_XProfile_For_User_Groups {
 				<ul class="<?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
-					<li><label><input name="for-user-groups[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $assgnd ) ); ?> /> <?php echo $group->name; ?></label></li>
+					<li><label><input name="for-user-groups[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $having ) ); ?> /> <?php echo $group->name; ?></label></li>
 
 					<?php endforeach; ?>
 				</ul>
@@ -471,12 +471,12 @@ class BP_XProfile_For_User_Groups {
 		}
 
 		// Bail if nothing changed
-		if ( $this->get_fieldgroup_user_groups( $fieldgroup->id ) == $groups ) {
+		if ( $this->get_fieldgroup_user_groups_having( $fieldgroup->id ) == $groups ) {
 			return;
 
 		// Update group user groups
 		} else {
-			$this->update_fieldgroup_user_groups( $fieldgroup->id, $groups );
+			$this->update_fieldgroup_user_groups_having( $fieldgroup->id, $groups );
 		}
 	}
 
@@ -491,7 +491,7 @@ class BP_XProfile_For_User_Groups {
 	 */
 	public function field_display_metabox( $field ) {
 
-		// Field 1 is the fullname field, which cannot be un-assigned
+		// The primary field is for all, so bail
 		if ( 1 == $field->id )
 			return;
 
@@ -500,16 +500,16 @@ class BP_XProfile_For_User_Groups {
 			'orderby'         => 'name',
 			'order'           => 'ASC',
 			'show_hidden'     => true,
-			'include'         => $this->get_fieldgroup_user_groups( $field->group_id ),
+			'include'         => $this->get_fieldgroup_user_groups_having( $field->group_id ),
 			'per_page'        => false,
 			'populate_extras' => false,
 		);
 
 		// Get all and assigned user groups
-		$groups = groups_get_groups( $args );
+		$groups  = groups_get_groups( $args );
 		$class   = array( 'user_groups' );
 		$class[] = count( $groups['groups'] ) > 6 ? 'scroll' : '';
-		$assgnd = ! empty( $field->id ) ? $this->get_field_user_groups( $field->id ) : array(); ?>
+		$having  = ! empty( $field->id ) ? $this->get_field_user_groups_having( $field->id ) : array(); ?>
 
 		<div id="for_user_groups" class="postbox">
 			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
@@ -521,7 +521,7 @@ class BP_XProfile_For_User_Groups {
 				<ul class="<?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
-					<li><label><input name="for-user-groups[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $assgnd ) ); ?> /> <?php echo $group->name; ?></label></li>
+					<li><label><input name="for-user-groups[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $having ) ); ?> /> <?php echo $group->name; ?></label></li>
 
 					<?php endforeach; ?>
 				</ul>
@@ -555,12 +555,12 @@ class BP_XProfile_For_User_Groups {
 		}
 
 		// Bail if nothing changed
-		if ( $this->get_field_user_groups( $field->id ) == $groups ) {
+		if ( $this->get_field_user_groups_having( $field->id ) == $groups ) {
 			return;
 
 		// Update field user groups
 		} else {
-			$this->update_field_user_groups( $field->id, $groups );
+			$this->update_field_user_groups_having( $field->id, $groups );
 		}
 	}
 
