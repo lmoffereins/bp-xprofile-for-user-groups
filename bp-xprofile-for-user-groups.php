@@ -631,7 +631,7 @@ class BP_XProfile_For_User_Groups {
 		?>
 
 		<div id="for_user_groups" class="postbox">
-			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
+			<h3><?php _e( 'User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
 			<div class="inside">
 				<p class="metabox-info">
 					<?php _e( 'Assign user groups to the profile field group to limit its applicability to the members of that group.', 'bp-xprofile-for-user-groups' ); ?>
@@ -736,7 +736,7 @@ class BP_XProfile_For_User_Groups {
 		?>
 
 		<div id="for_user_groups" class="postbox">
-			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
+			<h3><?php _e( 'User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
 			<div class="inside">
 				<p class="metabox-info">
 					<?php _e( 'Assign user groups to the profile field to limit its applicability to the members of that group. Selectable groups are limited to the ones assigned to the parent field group.', 'bp-xprofile-for-user-groups' ); ?>
