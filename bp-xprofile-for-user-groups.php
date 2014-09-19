@@ -637,6 +637,8 @@ class BP_XProfile_For_User_Groups {
 					<?php _e( 'Assign user groups to the profile field group to limit its applicability to the members of that group.', 'bp-xprofile-for-user-groups' ); ?>
 				</p>
 
+				<p><span class="description"><?php _e( 'Restrict the applicability of this fieldgroup', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
+
 				<ul class="groups_having <?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
@@ -645,7 +647,7 @@ class BP_XProfile_For_User_Groups {
 					<?php endforeach; ?>
 				</ul><!-- .groups_having -->
 
-				<p><span class="description"><?php _e( 'Groups that can view this fieldgroup', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
+				<p><span class="description"><?php _e( 'Restrict the visibility of this fieldgroup', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
 
 				<ul class="groups_viewing <?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
@@ -690,13 +692,9 @@ class BP_XProfile_For_User_Groups {
 				$groups = array();
 			}
 
-			// Bail if nothing changed
-			if ( call_user_func_array( array( $this, "get_fieldgroup_user_groups_{$type}" ), array( $field->id ) ) == $groups ) {
-				return;
-
-			// Update field user groups
-			} else {
-				call_user_func_array( array( $this, "update_fieldgroup_user_groups_{$type}" ), array( $field->id, $groups ) );
+			// Update if something changed
+			if ( call_user_func_array( array( $this, "get_fieldgroup_user_groups_{$type}" ), array( $fieldgroup->id ) ) == $groups ) {
+				call_user_func_array( array( $this, "update_fieldgroup_user_groups_{$type}" ), array( $fieldgroup->id, $groups ) );
 			}
 		}
 	}
@@ -742,6 +740,8 @@ class BP_XProfile_For_User_Groups {
 					<?php _e( 'Assign user groups to the profile field to limit its applicability to the members of that group. Selectable groups are limited to the ones assigned to the parent field group.', 'bp-xprofile-for-user-groups' ); ?>
 				</p>
 
+				<p><span class="description"><?php _e( 'Restrict the applicability of this field', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
+
 				<ul class="groups_having <?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
@@ -750,7 +750,7 @@ class BP_XProfile_For_User_Groups {
 					<?php endforeach; ?>
 				</ul><!-- .groups_having -->
 
-				<p><span class="description"><?php _e( 'Groups that can view this field', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
+				<p><span class="description"><?php _e( 'Restrict the visibility of this field', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
 
 				<ul class="groups_viewing <?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
@@ -795,12 +795,8 @@ class BP_XProfile_For_User_Groups {
 				$groups = array();
 			}
 
-			// Bail if nothing changed
-			if ( call_user_func_array( array( $this, "get_field_user_groups_{$type}" ), array( $field->id ) ) == $groups ) {
-				return;
-
-			// Update field user groups
-			} else {
+			// Update if something changed
+			if ( call_user_func_array( array( $this, "get_field_user_groups_{$type}" ), array( $field->id ) ) != $groups ) {
 				call_user_func_array( array( $this, "update_field_user_groups_{$type}" ), array( $field->id, $groups ) );
 			}
 		}
