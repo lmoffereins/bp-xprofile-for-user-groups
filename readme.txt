@@ -28,6 +28,10 @@ In development:
 
 == Changelog ==
 
+= 1.1.0 =
+* Introduced plugin singleton pattern
+* Introduced profile field user group visibility: viewing user groups
+
 = 1.0.1 =
 * Fixed bug with filtering field(group)s in Extended Profile admin page
 * Added metabox information toggler
