@@ -92,8 +92,8 @@ class BP_XProfile_For_User_Groups {
 					continue;
 				}
 
-				// Is loggedin user not an admin and not a member? Hide field
-				if ( ! bp_current_user_can( 'bp_moderate' ) && ! $this->is_user_field_member( $field_id, $current_user_id ) ) {
+				// Is loggedin user not an admin and he cannot view the field? Hide field
+				if ( ! bp_current_user_can( 'bp_moderate' ) && ! $this->can_user_view_field( $field_id, $current_user_id ) ) {
 					$hidden_fields[] = $field_id;
 					continue;
 				}
@@ -190,8 +190,8 @@ class BP_XProfile_For_User_Groups {
 				continue;
 			}
 
-			// Is loggedin user not an admin and not a member? Hide fieldgroup
-			if ( ! bp_current_user_can( 'bp_moderate' ) && ! $this->is_user_fieldgroup_member( $group->id, bp_loggedin_user_id() ) ) {
+			// Is loggedin user not an admin and he cannot view the fieldgroup? Hide fieldgroup
+			if ( ! bp_current_user_can( 'bp_moderate' ) && ! $this->can_user_view_fieldgroup( $group->id ) ) {
 				unset( $groups[$k] );
 				continue;
 			}
@@ -648,6 +648,8 @@ class BP_XProfile_For_User_Groups {
 				<p><span class="description"><?php _e( 'Groups that can view this fieldgroup', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
 
 				<ul class="groups_viewing <?php echo implode( ' ', $class ); ?>">
+					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="0" <?php checked( in_array( 0, $viewing ) ); ?> /> <?php _e( 'Users without groups', 'bp-xprofile-for-user-groups' ); ?></label></li>
+
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
 					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $viewing ) ); ?> /> <?php echo $group->name; ?></label></li>
@@ -671,25 +673,33 @@ class BP_XProfile_For_User_Groups {
 	 */
 	public function fieldgroup_save_metabox( $fieldgroup ) {
 
-		// Check the nonce
-		wp_verify_nonce( 'for-user-groups', '_wpnonce_for_user_groups' );
-
-		// Sanitize input
-		if ( isset( $_REQUEST['for-user-groups'] ) ) {
-			$groups = array_map( 'intval', (array) $_REQUEST['for-user-groups'] );
-
-		// No user groups selected
-		} else {
-			$groups = array();
-		}
-
-		// Bail if nothing changed
-		if ( $this->get_fieldgroup_user_groups_having( $fieldgroup->id ) == $groups ) {
+		// Bail if nonce does not verify
+		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce_for_user_groups'], 'for-user-groups' ) )
 			return;
 
-		// Update group user groups
-		} else {
-			$this->update_fieldgroup_user_groups_having( $fieldgroup->id, $groups );
+		// Walk for having and viewing groups
+		foreach ( array(
+			'having'  => 'for-user-groups',
+			'viewing' => 'for-user-groups-viewing'
+		) as $type => $name ) {
+
+			// Sanitize input
+			if ( isset( $_REQUEST[ $name ] ) ) {
+				$groups = array_map( 'intval', (array) $_REQUEST[ $name ] );
+
+			// No user groups selected
+			} else {
+				$groups = array();
+			}
+
+			// Bail if nothing changed
+			if ( call_user_func_array( array( $this, "get_fieldgroup_user_groups_{$type}" ), array( $field->id ) ) == $groups ) {
+				return;
+
+			// Update field user groups
+			} else {
+				call_user_func_array( array( $this, "update_fieldgroup_user_groups_{$type}" ), array( $field->id, $groups ) );
+			}
 		}
 	}
 
@@ -745,6 +755,8 @@ class BP_XProfile_For_User_Groups {
 				<p><span class="description"><?php _e( 'Groups that can view this field', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
 
 				<ul class="groups_viewing <?php echo implode( ' ', $class ); ?>">
+					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="0" <?php checked( in_array( 0, $viewing ) ); ?> /> <?php _e( 'Users without groups', 'bp-xprofile-for-user-groups' ); ?></label></li>
+
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
 					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $viewing ) ); ?> /> <?php echo $group->name; ?></label></li>
@@ -768,8 +780,9 @@ class BP_XProfile_For_User_Groups {
 	 */
 	public function field_save_metabox( $field ) {
 
-		// Check the nonce
-		wp_verify_nonce( 'for-user-groups', '_wpnonce_for_user_groups' );
+		// Bail if nonce does not verify
+		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce_for_user_groups'], 'for-user-groups' ) )
+			return;
 
 		// Walk for having and viewing groups
 		foreach ( array(
