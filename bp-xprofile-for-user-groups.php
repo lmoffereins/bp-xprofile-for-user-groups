@@ -34,17 +34,46 @@ if ( ! class_exists( 'BP_XProfile_For_User_Groups' ) ) :
  *
  * @since 1.0.0
  */
-class BP_XProfile_For_User_Groups {
+final class BP_XProfile_For_User_Groups {
+
+	/**
+	 * Setup and return the singleton pattern
+	 *
+	 * @since 1.1.0
+	 *
+	 * @uses BP_XProfile_For_User_Groups::setup_actions()
+	 * @return BP_XProfile_For_User_Groups
+	 */
+	public static function instance() {
+
+		// Store the instance locally
+		static $instance = null;
+
+		if ( null === $instance ) {
+			$instance = new BP_XProfile_For_User_Groups;
+			$instance->setup_actions();
+		}
+
+		// Always return the instance
+		return $instance;
+	}
 
 	/**
 	 * Setup plugin structure and hooks
 	 *
 	 * @since 1.0.0
+	 */
+	private function __construct() { /* Do nothing here */ }
+
+	/**
+	 * Setup default plugin actions and filters
+	 *
+	 * @since 1.1.0
 	 *
 	 * @uses add_filter()
 	 * @uses add_action()
 	 */
-	public function __construct() {
+	private function setup_actions() {
 
 		// Fields & fieldgroup filters
 		add_filter( 'bp_xprofile_get_hidden_fields_for_user', array( $this, 'filter_hidden_fields' ), 10, 3 );
@@ -866,12 +895,12 @@ class BP_XProfile_For_User_Groups {
 }
 
 /**
- * Initiate plugin class
+ * Initiate plugin class and return singleton
  *
  * @since 1.0.0
  *
  * @uses bp_is_active()
- * @uses BP_XProfile_For_User_Groups
+ * @return BP_XProfile_For_User_Groups
  */
 function bp_xprofile_for_user_groups() {
 
@@ -879,7 +908,7 @@ function bp_xprofile_for_user_groups() {
 	if ( ! bp_is_active( 'groups' ) || ! bp_is_active( 'xprofile' ) )
 		return;
 
-	new BP_XProfile_For_User_Groups;
+	return BP_XProfile_For_User_Groups::instance();
 }
 
 // Fire it up!
