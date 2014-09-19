@@ -330,6 +330,7 @@ class BP_XProfile_For_User_Groups {
 	 *
 	 * @uses bp_loggedin_user_id()
 	 * @uses groups_get_groups()
+	 * @uses BP_XProfile_For_User_Groups::is_user_fieldgroup_member()
 	 * @uses BP_XProfile_For_User_Groups::get_fieldgroup_user_groups_viewing()
 	 *
 	 * @param int $fieldgroup_id Field group ID
@@ -377,11 +378,12 @@ class BP_XProfile_For_User_Groups {
 	/**
 	 * Return whether the user can view the field
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 *
 	 * @uses bp_loggedin_user_id()
 	 * @uses BP_XProfile_For_User_Groups::can_user_view_fieldgroup()
 	 * @uses groups_get_groups()
+	 * @uses BP_XProfile_For_User_Groups::is_user_field_member()
 	 * @uses BP_XProfile_For_User_Groups::get_field_user_groups_viewing()
 	 *
 	 * @param int $fieldgroup_id Field group ID
