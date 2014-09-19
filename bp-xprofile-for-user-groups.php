@@ -321,15 +321,15 @@ class BP_XProfile_For_User_Groups {
 		}
 	}
 
-	/** Get/Update ************************************************************/
+	/** Groups Having *********************************************************/
 
 	/**
-	 * Return the xprofile fieldgroup assigned user groups
+	 * Return the xprofile fieldgroup assigned user groups that have the fieldgroup
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param int $fieldgroup_id Fieldgroup ID
-	 * @return array Fieldgroup user group ids
+	 * @return array Fieldgroup having user group ids
 	 */
 	public function get_fieldgroup_user_groups_having( $fieldgroup_id ) {
 		$meta = bp_xprofile_get_meta( $fieldgroup_id, 'group', 'for-user-groups' );
@@ -342,12 +342,12 @@ class BP_XProfile_For_User_Groups {
 	}
 
 	/**
-	 * Return the xprofile field assigned user groups
+	 * Return the xprofile field assigned user groups that have the field
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param int $field_id Field ID
-	 * @return array Field user field ids
+	 * @return array Field having user field ids
 	 */
 	public function get_field_user_groups_having( $field_id ) {
 		$meta = bp_xprofile_get_meta( $field_id, 'field', 'for-user-groups' );
@@ -366,7 +366,7 @@ class BP_XProfile_For_User_Groups {
 	 *
 	 * @uses bp_xprofile_update_fieldgroup_meta()
 	 * @param int $fieldgroup_id Fieldgroup ID
-	 * @param array $groups Assigned user group ids
+	 * @param array $groups Assigned having user group ids
 	 */
 	public function update_fieldgroup_user_groups_having( $fieldgroup_id, $groups ) {
 
@@ -384,7 +384,7 @@ class BP_XProfile_For_User_Groups {
 	 *
 	 * @uses bp_xprofile_update_field_meta()
 	 * @param int $field_id Field ID
-	 * @param array $groups Assigned user group ids
+	 * @param array $groups Assigned having user group ids
 	 */
 	public function update_field_user_groups_having( $field_id, $groups ) {
 
@@ -393,6 +393,80 @@ class BP_XProfile_For_User_Groups {
 
 		// Update group meta
 		bp_xprofile_update_field_meta( $field_id, 'for-user-groups', $groups );
+	}
+
+	/** Groups Viewing ********************************************************/
+
+	/**
+	 * Return the xprofile fieldgroup assigned user groups that can view the fieldgroup
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int $fieldgroup_id Fieldgroup ID
+	 * @return array Fieldgroup viewing user group ids
+	 */
+	public function get_fieldgroup_user_groups_viewing( $fieldgroup_id ) {
+		$meta = bp_xprofile_get_meta( $fieldgroup_id, 'group', 'for-user-groups-viewing' );
+
+		// Sanitize meta
+		if ( empty( $meta ) )
+			$meta = array();
+
+		return (array) $meta;
+	}
+
+	/**
+	 * Return the xprofile field assigned user groups that can view the field
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int $field_id Field ID
+	 * @return array Field viewing user field ids
+	 */
+	public function get_field_user_groups_viewing( $field_id ) {
+		$meta = bp_xprofile_get_meta( $field_id, 'field', 'for-user-groups-viewing' );
+
+		// Sanitize meta
+		if ( empty( $meta ) )
+			$meta = array();
+
+		return (array) $meta;
+	}
+
+	/**
+	 * Update the fieldgroup's viewing user groups meta value
+	 *
+	 * @since 1.1.0
+	 *
+	 * @uses bp_xprofile_update_fieldgroup_meta()
+	 * @param int $fieldgroup_id Fieldgroup ID
+	 * @param array $groups Assigned viewing user group ids
+	 */
+	public function update_fieldgroup_user_groups_viewing( $fieldgroup_id, $groups ) {
+
+		// Sanitize input
+		$groups = array_map( 'intval', (array) $groups );
+
+		// Update group meta
+		bp_xprofile_update_fieldgroup_meta( $fieldgroup_id, 'for-user-groups-viewing', $groups );
+	}
+
+	/**
+	 * Update the field's viewing user groups meta value
+	 *
+	 * @since 1.1.0
+	 *
+	 * @uses bp_xprofile_update_field_meta()
+	 * @param int $field_id Field ID
+	 * @param array $groups Assigned viewing user group ids
+	 */
+	public function update_field_user_groups_viewing( $field_id, $groups ) {
+
+		// Sanitize input
+		$groups = array_map( 'intval', (array) $groups );
+
+		// Update group meta
+		bp_xprofile_update_field_meta( $field_id, 'for-user-groups-viewing', $groups );
 	}
 
 	/** Metaboxes *************************************************************/
