@@ -347,7 +347,7 @@ class BP_XProfile_For_User_Groups {
 			$user_id = bp_loggedin_user_id();
 		}
 
-		// Fieldgroup members can always view their groups' data
+		// Fieldgroup members can always view their data
 		if ( $this->is_user_fieldgroup_member( $fieldgroup_id, $user_id ) )
 			return true;
 
@@ -420,7 +420,7 @@ class BP_XProfile_For_User_Groups {
 		if ( is_object( $field_id ) )
 			$field_id = $field_id->id;
 
-		// Field members can always view their groups' data
+		// Field members can always view their data
 		if ( $this->is_user_field_member( $field_id, $user_id ) )
 			return true;
 
@@ -648,8 +648,6 @@ class BP_XProfile_For_User_Groups {
 				<p><span class="description"><?php _e( 'Groups that can view this fieldgroup', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
 
 				<ul class="groups_viewing <?php echo implode( ' ', $class ); ?>">
-					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="0" <?php checked( in_array( 0, $viewing ) ); ?> /> <?php _e( 'Users without groups', 'bp-xprofile-for-user-groups' ); ?></label></li>
-
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
 					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $viewing ) ); ?> /> <?php echo $group->name; ?></label></li>
@@ -755,8 +753,6 @@ class BP_XProfile_For_User_Groups {
 				<p><span class="description"><?php _e( 'Groups that can view this field', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
 
 				<ul class="groups_viewing <?php echo implode( ' ', $class ); ?>">
-					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="0" <?php checked( in_array( 0, $viewing ) ); ?> /> <?php _e( 'Users without groups', 'bp-xprofile-for-user-groups' ); ?></label></li>
-
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
 					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $viewing ) ); ?> /> <?php echo $group->name; ?></label></li>
