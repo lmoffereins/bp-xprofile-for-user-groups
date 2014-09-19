@@ -229,7 +229,7 @@ class BP_XProfile_For_User_Groups {
 			$user_id = bp_displayed_user_id();
 		}
 
-		// Get fieldgroups' group ids
+		// Get fieldgroups' having groups ids
 		$group_ids = $this->get_fieldgroup_user_groups_having( $fieldgroup_id );
 
 		// Groups are assigned
@@ -298,7 +298,7 @@ class BP_XProfile_For_User_Groups {
 		if ( is_object( $field_id ) )
 			$field_id = $field_id->id;
 
-		// Get fieldgroups' group ids
+		// Get field's having groups ids
 		$group_ids = $this->get_field_user_groups_having( $field_id );
 
 		// Groups are assigned
@@ -307,7 +307,133 @@ class BP_XProfile_For_User_Groups {
 			// Get user's memberships limited to field's user groups
 			$groups = groups_get_groups( array(
 				'user_id'         => $user_id,
-				'include'         => $this->get_field_user_groups_having( $field_id ),
+				'include'         => $group_ids,
+				'show_hidden'     => true,
+				'per_page'        => false,
+				'populate_extras' => false,
+			) );
+
+			return (bool) $groups['groups'];
+
+		// No groups were assigned, so user has access
+		} else {
+			return true;
+		}
+	}
+
+	/** Can User View *********************************************************/
+
+	/**
+	 * Return whether the user can view the fieldgroup
+	 *
+	 * @since 1.1.0
+	 *
+	 * @uses bp_loggedin_user_id()
+	 * @uses groups_get_groups()
+	 * @uses BP_XProfile_For_User_Groups::get_fieldgroup_user_groups_viewing()
+	 *
+	 * @param int $fieldgroup_id Field group ID
+	 * @param int $user_id Optional. User ID. Defaults to the current user.
+	 * @return bool User can view the fieldgroup
+	 */
+	public function can_user_view_fieldgroup( $fieldgroup_id, $user_id = 0 ) {
+
+		// Bail if this is the primary fieldgroup
+		if ( 1 == $fieldgroup_id )
+			return true;
+
+		// Default to current user
+		if ( empty( $user_id ) || ! is_numeric( $user_id ) ) {
+			$user_id = bp_loggedin_user_id();
+		}
+
+		// Fieldgroup members can always view their groups' data
+		if ( $this->is_user_fieldgroup_member( $fieldgroup_id, $user_id ) )
+			return true;
+
+		// Get fieldgroups' viewing groups ids
+		$group_ids = $this->get_fieldgroup_user_groups_viewing( $fieldgroup_id );
+
+		// Groups are assigned
+		if ( ! empty( $group_ids ) ) {
+
+			// Get user's memberships limited to fieldgroup's user groups
+			$groups = groups_get_groups( array(
+				'user_id'         => $user_id,
+				'include'         => $group_ids,
+				'show_hidden'     => true,
+				'per_page'        => false,
+				'populate_extras' => false,
+			) );
+
+			return (bool) $groups['groups'];
+
+		// No groups were assigned, so user has access
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Return whether the user can view the field
+	 *
+	 * @since 1.0.0
+	 *
+	 * @uses bp_loggedin_user_id()
+	 * @uses BP_XProfile_For_User_Groups::can_user_view_fieldgroup()
+	 * @uses groups_get_groups()
+	 * @uses BP_XProfile_For_User_Groups::get_field_user_groups_viewing()
+	 *
+	 * @param int $fieldgroup_id Field group ID
+	 * @param int $user_id Optional. User ID. Defaults to the current user.
+	 * @param bool $check_fieldgroup Optional. Whether to do an early parent fieldgroup's membership check.
+	 * @return bool User is field's user group member
+	 */
+	public function can_user_view_field( $field_id, $user_id = 0, $check_fieldgroup = true ) {
+
+		// Bail if this is the primary field
+		if ( 1 == $field_id || ( is_object( $field_id ) && 1 == $field_id->id ) )
+			return true;
+
+		// Default to current user
+		if ( ! is_numeric( $user_id ) ) {
+			$user_id = bp_loggedin_user_id();
+		}
+
+		// Check parent fieldgroup membership
+		if ( true === $check_fieldgroup ) {
+
+			// Get the field object to find the fieldgroup ID
+			if ( is_object( $field_id ) ) {
+				$field = $field_id;
+			} else {
+				$field = new BP_XProfile_Field( $field_id );
+			}
+
+			// Bail early if user cannot view the fieldgroup
+			if ( ! $this->can_user_view_fieldgroup( $field->group_id, $user_id ) ) {
+				return false;
+			}
+		}
+
+		// Get field ID
+		if ( is_object( $field_id ) )
+			$field_id = $field_id->id;
+
+		// Field members can always view their groups' data
+		if ( $this->is_user_field_member( $field_id, $user_id ) )
+			return true;
+
+		// Get field's viewing groups ids
+		$group_ids = $this->get_field_user_groups_viewing( $field_id );
+
+		// Groups are assigned
+		if ( ! empty( $group_ids ) ) {
+
+			// Get user's memberships limited to field's user groups
+			$groups = groups_get_groups( array(
+				'user_id'         => $user_id,
+				'include'         => $group_ids,
 				'show_hidden'     => true,
 				'per_page'        => false,
 				'populate_extras' => false,
