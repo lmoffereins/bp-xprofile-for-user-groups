@@ -621,11 +621,14 @@ class BP_XProfile_For_User_Groups {
 			'populate_extras' => false,
 		);
 
-		// Get all, having and showing user groups
+		// Get all, having and viewing user groups
 		$groups  = groups_get_groups( $args );
 		$class   = array( 'user_groups' );
 		$class[] = count( $groups['groups'] ) > 6 ? 'scroll' : '';
-		$having  = ! empty( $fieldgroup->id ) ? $this->get_fieldgroup_user_groups_having(  $fieldgroup->id ) : array(); ?>
+		$having  = ! empty( $fieldgroup->id ) ? $this->get_fieldgroup_user_groups_having(  $fieldgroup->id ) : array();
+		$viewing = ! empty( $fieldgroup->id ) ? $this->get_fieldgroup_user_groups_viewing( $fieldgroup->id ) : array();
+
+		?>
 
 		<div id="for_user_groups" class="postbox">
 			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
@@ -634,13 +637,23 @@ class BP_XProfile_For_User_Groups {
 					<?php _e( 'Assign user groups to the profile field group to limit its applicability to the members of that group.', 'bp-xprofile-for-user-groups' ); ?>
 				</p>
 
-				<ul class="<?php echo implode( ' ', $class ); ?>">
+				<ul class="groups_having <?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
 					<li><label><input name="for-user-groups[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $having ) ); ?> /> <?php echo $group->name; ?></label></li>
 
 					<?php endforeach; ?>
-				</ul>
+				</ul><!-- .groups_having -->
+
+				<p><span class="description"><?php _e( 'Groups that can view this fieldgroup', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
+
+				<ul class="groups_viewing <?php echo implode( ' ', $class ); ?>">
+					<?php foreach ( $groups['groups'] as $group ) : ?>
+
+					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $viewing ) ); ?> /> <?php echo $group->name; ?></label></li>
+
+					<?php endforeach; ?>
+				</ul><!-- .groups_viewing -->
 			</div>
 
 			<?php wp_nonce_field( 'for-user-groups', '_wpnonce_for_user_groups' ); ?>
@@ -705,11 +718,14 @@ class BP_XProfile_For_User_Groups {
 			'populate_extras' => false,
 		);
 
-		// Get all and assigned user groups
+		// Get all, having and viewing user groups
 		$groups  = groups_get_groups( $args );
 		$class   = array( 'user_groups' );
 		$class[] = count( $groups['groups'] ) > 6 ? 'scroll' : '';
-		$having  = ! empty( $field->id ) ? $this->get_field_user_groups_having( $field->id ) : array(); ?>
+		$having  = ! empty( $field->id ) ? $this->get_field_user_groups_having(  $field->id ) : array();
+		$viewing = ! empty( $field->id ) ? $this->get_field_user_groups_viewing( $field->id ) : array();
+
+		?>
 
 		<div id="for_user_groups" class="postbox">
 			<h3><?php _e( 'Assigned User Groups', 'bp-xprofile-for-user-groups' ); ?> <?php $this->the_info_toggler(); ?></h3>
@@ -718,13 +734,23 @@ class BP_XProfile_For_User_Groups {
 					<?php _e( 'Assign user groups to the profile field to limit its applicability to the members of that group. Selectable groups are limited to the ones assigned to the parent field group.', 'bp-xprofile-for-user-groups' ); ?>
 				</p>
 
-				<ul class="<?php echo implode( ' ', $class ); ?>">
+				<ul class="groups_having <?php echo implode( ' ', $class ); ?>">
 					<?php foreach ( $groups['groups'] as $group ) : ?>
 
 					<li><label><input name="for-user-groups[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $having ) ); ?> /> <?php echo $group->name; ?></label></li>
 
 					<?php endforeach; ?>
-				</ul>
+				</ul><!-- .groups_having -->
+
+				<p><span class="description"><?php _e( 'Groups that can view this field', 'bp-xprofile-for-user-groups' ); ?>:</span></p>
+
+				<ul class="groups_viewing <?php echo implode( ' ', $class ); ?>">
+					<?php foreach ( $groups['groups'] as $group ) : ?>
+
+					<li><label><input name="for-user-groups-viewing[]" type="checkbox" value="<?php echo $group->id; ?>" <?php checked( in_array( $group->id, $viewing ) ); ?> /> <?php echo $group->name; ?></label></li>
+
+					<?php endforeach; ?>
+				</ul><!-- .groups_viewing -->
 			</div>
 
 			<?php wp_nonce_field( 'for-user-groups', '_wpnonce_for_user_groups' ); ?>
@@ -745,22 +771,29 @@ class BP_XProfile_For_User_Groups {
 		// Check the nonce
 		wp_verify_nonce( 'for-user-groups', '_wpnonce_for_user_groups' );
 
-		// Sanitize input
-		if ( isset( $_REQUEST['for-user-groups'] ) ) {
-			$groups = array_map( 'intval', (array) $_REQUEST['for-user-groups'] );
+		// Walk for having and viewing groups
+		foreach ( array(
+			'having'  => 'for-user-groups',
+			'viewing' => 'for-user-groups-viewing'
+		) as $type => $name ) {
 
-		// No user groups selected
-		} else {
-			$groups = array();
-		}
+			// Sanitize input
+			if ( isset( $_REQUEST[ $name ] ) ) {
+				$groups = array_map( 'intval', (array) $_REQUEST[ $name ] );
 
-		// Bail if nothing changed
-		if ( $this->get_field_user_groups_having( $field->id ) == $groups ) {
-			return;
+			// No user groups selected
+			} else {
+				$groups = array();
+			}
 
-		// Update field user groups
-		} else {
-			$this->update_field_user_groups_having( $field->id, $groups );
+			// Bail if nothing changed
+			if ( call_user_func_array( array( $this, "get_field_user_groups_{$type}" ), array( $field->id ) ) == $groups ) {
+				return;
+
+			// Update field user groups
+			} else {
+				call_user_func_array( array( $this, "update_field_user_groups_{$type}" ), array( $field->id, $groups ) );
+			}
 		}
 	}
 
