@@ -118,6 +118,9 @@ final class BP_XProfile_For_User_Groups {
 		add_action( 'xprofile_field_after_submitbox', array( $this, 'field_display_metabox'      ) );
 		add_action( 'xprofile_field_after_save',      array( $this, 'field_save_metabox'         ) );
 		add_action( 'bp_admin_head',                  array( $this, 'print_styles'               ) );
+
+		// Fire plugin loaded hook
+		do_action( 'bp_xprofile_for_user_groups_loaded' );
 	}
 
 	/** Plugin ****************************************************************/
