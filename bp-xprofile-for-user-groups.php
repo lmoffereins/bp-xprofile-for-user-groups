@@ -51,6 +51,7 @@ final class BP_XProfile_For_User_Groups {
 
 		if ( null === $instance ) {
 			$instance = new BP_XProfile_For_User_Groups;
+			$instance->setup_globals();
 			$instance->setup_actions();
 		}
 
@@ -64,6 +65,32 @@ final class BP_XProfile_For_User_Groups {
 	 * @since 1.0.0
 	 */
 	private function __construct() { /* Do nothing here */ }
+
+	/**
+	 * Setup default class globals
+	 *
+	 * @since 1.1.0
+	 */
+	private function setup_globals() {
+
+		/** Version **************************************************/
+
+		$this->version      = '1.1.0';
+
+		/** Plugin ***************************************************/
+
+		$this->file         = __FILE__;
+		$this->basename     = plugin_basename( $this->file );
+		$this->plugin_dir   = plugin_dir_path( $this->file );
+		$this->plugin_url   = plugin_dir_url(  $this->file );
+
+		// Languages
+		$this->lang_dir     = trailingslashit( $this->plugin_dir . 'languages' );
+
+		/** Misc *****************************************************/
+
+		$this->domain = 'bp-xprofile-for-user-groups';
+	}
 
 	/**
 	 * Setup default plugin actions and filters
