@@ -70,10 +70,13 @@ final class BP_XProfile_For_User_Groups {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @uses add_filter()
-	 * @uses add_action()
+	 * @uses bp_is_active() To check if groups or xprofile component is active
 	 */
 	private function setup_actions() {
+
+		// Bail if groups or xprofile component is not active
+		if ( ! bp_is_active( 'groups' ) || ! bp_is_active( 'xprofile' ) )
+			return;
 
 		// Fields & fieldgroup filters
 		add_filter( 'bp_xprofile_get_hidden_fields_for_user', array( $this, 'filter_hidden_fields' ), 10, 3 );
@@ -899,15 +902,9 @@ final class BP_XProfile_For_User_Groups {
  *
  * @since 1.0.0
  *
- * @uses bp_is_active()
  * @return BP_XProfile_For_User_Groups
  */
 function bp_xprofile_for_user_groups() {
-
-	// Bail if groups or xprofile component is not active
-	if ( ! bp_is_active( 'groups' ) || ! bp_is_active( 'xprofile' ) )
-		return;
-
 	return BP_XProfile_For_User_Groups::instance();
 }
 
