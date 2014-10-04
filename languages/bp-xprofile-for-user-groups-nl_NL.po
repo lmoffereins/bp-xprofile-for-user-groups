@@ -1,0 +1,99 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BP XProfile For User Groups v1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-10-04 21:33:01+0000\n"
+"Last-Translator: Laurens Offereins <lmoffereins@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#. translators: plugin header field 'Name'
+#: bp-xprofile-for-user-groups.php:0
+#@ bp-xprofile-for-user-groups
+msgid "BP XProfile For User Groups"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#: bp-xprofile-for-user-groups.php:0
+#@ bp-xprofile-for-user-groups
+msgid "https://github.com/lmoffereins/bp-xprofile-for-user-groups"
+msgstr ""
+
+#. translators: plugin header field 'Description'
+#: bp-xprofile-for-user-groups.php:0
+#@ bp-xprofile-for-user-groups
+msgid "Manage user group specific profile field(group)s in BuddyPress"
+msgstr "Beheer profiel veld(groep)en speciaal voor gebruikersgroepen in BuddyPress"
+
+#. translators: plugin header field 'Author'
+#: bp-xprofile-for-user-groups.php:0
+#@ bp-xprofile-for-user-groups
+msgid "Laurens Offereins"
+msgstr ""
+
+#. translators: plugin header field 'AuthorURI'
+#: bp-xprofile-for-user-groups.php:0
+#@ bp-xprofile-for-user-groups
+msgid "https://github.com/lmoffereins"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: bp-xprofile-for-user-groups.php:0
+#@ bp-xprofile-for-user-groups
+msgid "1.0.1"
+msgstr ""
+
+#: bp-xprofile-for-user-groups.php:730
+#: bp-xprofile-for-user-groups.php:833
+#@ bp-xprofile-for-user-groups
+msgid "User Groups"
+msgstr "Gebruikersgroepen"
+
+#: bp-xprofile-for-user-groups.php:733
+#@ bp-xprofile-for-user-groups
+msgid "Assign user groups to the profile field group to limit its applicability to the members of that group."
+msgstr "Wijs gebruikersgroepen toe aan deze profiel veldgroep om de toepassing ervan te beperken tot de leden van die groep."
+
+#: bp-xprofile-for-user-groups.php:736
+#@ bp-xprofile-for-user-groups
+msgid "Restrict the applicability of this fieldgroup"
+msgstr "Bepaal voor welke groepen deze veldgroep van toepassing is"
+
+#: bp-xprofile-for-user-groups.php:746
+#@ bp-xprofile-for-user-groups
+msgid "Restrict the visibility of this fieldgroup"
+msgstr "Bepaal welke groepen deze veldgroep mogen zien"
+
+#: bp-xprofile-for-user-groups.php:836
+#@ bp-xprofile-for-user-groups
+msgid "Assign user groups to the profile field to limit its applicability to the members of that group. Selectable groups are limited to the ones assigned to the parent field group."
+msgstr "Wijs gebruikersgroepen toe aan het profielveld om de toepassing te beperken tot de leden van die groep. Alleen groepen die toegang hebben tot de betreffende veldgroep kunnen geselecteerd worden."
+
+#: bp-xprofile-for-user-groups.php:839
+#@ bp-xprofile-for-user-groups
+msgid "Restrict the applicability of this field"
+msgstr "Bepaal voor welke groepen dit veld van toepassing is"
+
+#: bp-xprofile-for-user-groups.php:849
+#@ bp-xprofile-for-user-groups
+msgid "Restrict the visibility of this field"
+msgstr "Bepaal welke groepen dit veld mogen zien"
+
+#: bp-xprofile-for-user-groups.php:907
+#@ bp-xprofile-for-user-groups
+msgid "Toggle metabox information"
+msgstr "Toon/verberg de metabox informatie"
+

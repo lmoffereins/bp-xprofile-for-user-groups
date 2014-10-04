@@ -946,8 +946,8 @@ final class BP_XProfile_For_User_Groups {
 		</style>
 
 		<script type="text/javascript">
-			// Toggle metabox information
 			jQuery('document').ready( function( $ ) {
+				// Toggle metabox information
 				var $box = $('#for_user_groups');
 				$box.on( 'click', 'i.dashicons-info', function() {
 					$box.find( 'p.metabox-info' ).toggle();
