@@ -105,6 +105,9 @@ final class BP_XProfile_For_User_Groups {
 		if ( ! bp_is_active( 'groups' ) || ! bp_is_active( 'xprofile' ) )
 			return;
 
+		// Plugin
+		add_action( 'init', array( $this, 'load_textdomain' ) );
+
 		// Fields & fieldgroup filters
 		add_filter( 'bp_xprofile_get_hidden_fields_for_user', array( $this, 'filter_hidden_fields' ), 10, 3 );
 		add_filter( 'bp_xprofile_get_groups',                 array( $this, 'filter_fieldgroups'   ), 10, 2 );
@@ -115,6 +118,38 @@ final class BP_XProfile_For_User_Groups {
 		add_action( 'xprofile_field_after_submitbox', array( $this, 'field_display_metabox'      ) );
 		add_action( 'xprofile_field_after_save',      array( $this, 'field_save_metabox'         ) );
 		add_action( 'bp_admin_head',                  array( $this, 'print_styles'               ) );
+	}
+
+	/** Plugin ****************************************************************/
+
+	/**
+	 * Load the translation file for current language
+	 *
+	 * Note that custom translation files inside the Plugin folder will
+	 * be removed on Plugin updates. If you're creating custom translation
+	 * files, please use the global language folder.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @uses apply_filters() Calls 'plugin_locale' with {@link get_locale()} value
+	 * @uses load_textdomain() To load the textdomain
+	 * @uses load_plugin_textdomain() To load the plugin textdomain
+	 */
+	public function load_textdomain() {
+
+		// Traditional WordPress plugin locale filter
+		$locale        = apply_filters( 'plugin_locale', get_locale(), $this->domain );
+		$mofile        = sprintf( '%1$s-%2$s.mo', $this->domain, $locale );
+
+		// Setup paths to current locale file
+		$mofile_local  = $this->lang_dir . $mofile;
+		$mofile_global = WP_LANG_DIR . '/bp-xprofile-for-user-groups/' . $mofile;
+
+		// Look in global /wp-content/languages/bp-xprofile-for-user-groups folder first
+		load_textdomain( $this->domain, $mofile_global );
+
+		// Look in global /wp-content/languages/plugins/ and local plugin languages folder
+		load_plugin_textdomain( $this->domain, false, 'bp-xprofile-for-user-groups/languages' );
 	}
 
 	/** Field & Fieldgroup Filters ********************************************/
