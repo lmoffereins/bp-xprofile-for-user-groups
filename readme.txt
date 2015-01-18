@@ -28,6 +28,9 @@ In development:
 
 == Changelog ==
 
+= 1.1.1 =
+* Require BP 2.1
+
 = 1.1.0 =
 * Added plugin singleton pattern
 * Added profile field user group visibility: viewing user groups

@@ -101,8 +101,8 @@ final class BP_XProfile_For_User_Groups {
 	 */
 	private function setup_actions() {
 
-		// Bail if groups or xprofile component is not active
-		if ( ! bp_is_active( 'groups' ) || ! bp_is_active( 'xprofile' ) )
+		// Bail when BP < 2.1 or when the groups and xprofile component are not active
+		if ( ! version_compare( buddypress()->version, '2.1', '>=' ) || ! bp_is_active( 'groups' ) || ! bp_is_active( 'xprofile' ) )
 			return;
 
 		// Plugin
