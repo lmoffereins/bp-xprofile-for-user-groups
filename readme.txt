@@ -3,7 +3,7 @@ Contributors: Offereins
 Tags: buddypress, groups, xprofile, profile, field, group
 Requires at least: 3.8, BP 2.1
 Tested up to: 3.9
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,8 @@ In development:
 == Changelog ==
 
 = 1.1.1 =
-* Require BP 2.1
+* Requires BP 2.1
+* Fixed printing scripts on multisite network admin page
 
 = 1.1.0 =
 * Added plugin singleton pattern

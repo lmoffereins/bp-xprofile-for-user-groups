@@ -17,7 +17,7 @@
  * Plugin Name:       BP XProfile For User Groups
  * Description:       Manage user group specific profile field(group)s in BuddyPress
  * Plugin URI:        https://github.com/lmoffereins/bp-xprofile-for-user-groups
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            Laurens Offereins
  * Author URI:        https://github.com/lmoffereins
  * Text Domain:       bp-xprofile-for-user-groups
@@ -75,21 +75,21 @@ final class BP_XProfile_For_User_Groups {
 
 		/** Version **************************************************/
 
-		$this->version      = '1.1.0';
+		$this->version    = '1.1.1';
 
 		/** Plugin ***************************************************/
 
-		$this->file         = __FILE__;
-		$this->basename     = plugin_basename( $this->file );
-		$this->plugin_dir   = plugin_dir_path( $this->file );
-		$this->plugin_url   = plugin_dir_url(  $this->file );
+		$this->file       = __FILE__;
+		$this->basename   = plugin_basename( $this->file );
+		$this->plugin_dir = plugin_dir_path( $this->file );
+		$this->plugin_url = plugin_dir_url(  $this->file );
 
 		// Languages
-		$this->lang_dir     = trailingslashit( $this->plugin_dir . 'languages' );
+		$this->lang_dir   = trailingslashit( $this->plugin_dir . 'languages' );
 
 		/** Misc *****************************************************/
 
-		$this->domain = 'bp-xprofile-for-user-groups';
+		$this->domain     = 'bp-xprofile-for-user-groups';
 	}
 
 	/**
