@@ -106,7 +106,7 @@ final class BP_XProfile_For_User_Groups {
 			return;
 
 		// Plugin
-		add_action( 'init', array( $this, 'load_textdomain' ) );
+		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 
 		// Fields & fieldgroup filters
 		add_filter( 'bp_xprofile_get_hidden_fields_for_user', array( $this, 'filter_hidden_fields' ), 10, 3 );
@@ -117,7 +117,7 @@ final class BP_XProfile_For_User_Groups {
 		add_action( 'xprofile_group_after_save',      array( $this, 'fieldgroup_save_metabox'    ) );
 		add_action( 'xprofile_field_after_submitbox', array( $this, 'field_display_metabox'      ) );
 		add_action( 'xprofile_field_after_save',      array( $this, 'field_save_metabox'         ) );
-		add_action( 'bp_admin_head',                  array( $this, 'print_styles'               ) );
+		add_action( 'bp_admin_head',                  array( $this, 'admin_scripts'              ) );
 
 		// Fire plugin loaded hook
 		do_action( 'bp_xprofile_for_user_groups_loaded' );
@@ -905,6 +905,8 @@ final class BP_XProfile_For_User_Groups {
 	 * Output the metabox information toggle button
 	 *
 	 * @since 1.0.1
+	 *
+	 * @return string HTML <i> element
 	 */
 	public function the_info_toggler() {
 		printf( '<i class="dashicons-before dashicons-info" title="%s"></i>', __( 'Toggle metabox information', 'bp-xprofile-for-user-groups' ) );
@@ -913,12 +915,14 @@ final class BP_XProfile_For_User_Groups {
 	/**
 	 * Output specific metabox styles for the xprofile admin
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.1
+	 *
+	 * @uses BP_XProfile_For_User_Groups::is_xprofile_admin()
 	 */
-	public function print_styles() {
+	public function admin_scripts() {
 
 		// Bail when this is not an xprofile admin page
-		if ( ! isset( get_current_screen()->id ) || 'users_page_bp-profile-setup' != get_current_screen()->id )
+		if ( ! $this->is_xprofile_admin() )
 			return; ?>
 
 		<style type="text/css">
@@ -951,7 +955,7 @@ final class BP_XProfile_For_User_Groups {
 		<script type="text/javascript">
 			jQuery('document').ready( function( $ ) {
 				// Toggle metabox information
-				var $box = $('#for_user_groups');
+				var $box = $( '#for_user_groups' );
 				$box.on( 'click', 'i.dashicons-info', function() {
 					$box.find( 'p.metabox-info' ).toggle();
 				});
@@ -959,6 +963,30 @@ final class BP_XProfile_For_User_Groups {
 		</script>
 
 		<?php
+	}
+
+	/**
+	 * Return whether we are on the XProfile admin pages
+	 *
+	 * @since 1.1.1
+	 *
+	 * @uses get_current_screen()
+	 * 
+	 * @return bool This is an XProfile admin page
+	 */
+	public function is_xprofile_admin() {
+
+		// Bail when not in the admin
+		if ( ! is_admin() )
+			return false;
+
+		// Define expected screen id
+		$screen_id = 'users_page_bp-profile-setup';
+		if ( is_network_admin() ) {
+			$screen_id .= '-network';
+		}
+
+		return $screen_id === get_current_screen()->id;
 	}
 }
 
