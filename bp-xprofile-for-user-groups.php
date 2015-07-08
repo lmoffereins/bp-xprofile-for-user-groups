@@ -772,8 +772,8 @@ final class BP_XProfile_For_User_Groups {
 	 */
 	public function fieldgroup_save_metabox( $fieldgroup ) {
 
-		// Bail if nonce does not verify
-		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce_for_user_groups'], 'for-user-groups' ) )
+		// Bail when nonce does not verify
+		if ( ! isset( $_REQUEST['_wpnonce_for_user_groups' ] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_for_user_groups'], 'for-user-groups' ) )
 			return;
 
 		// Walk for having and viewing groups
@@ -875,8 +875,8 @@ final class BP_XProfile_For_User_Groups {
 	 */
 	public function field_save_metabox( $field ) {
 
-		// Bail if nonce does not verify
-		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce_for_user_groups'], 'for-user-groups' ) )
+		// Bail when nonce does not verify
+		if ( ! isset( $_REQUEST['_wpnonce_for_user_groups'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_for_user_groups'], 'for-user-groups' ) )
 			return;
 
 		// Walk for having and viewing groups
