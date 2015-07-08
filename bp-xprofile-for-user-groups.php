@@ -791,8 +791,8 @@ final class BP_XProfile_For_User_Groups {
 				$groups = array();
 			}
 
-			// Update if something changed
-			if ( call_user_func_array( array( $this, "get_fieldgroup_user_groups_{$type}" ), array( $fieldgroup->id ) ) == $groups ) {
+			// Update when something changed
+			if ( call_user_func_array( array( $this, "get_fieldgroup_user_groups_{$type}" ), array( $fieldgroup->id ) ) != $groups ) {
 				call_user_func_array( array( $this, "update_fieldgroup_user_groups_{$type}" ), array( $fieldgroup->id, $groups ) );
 			}
 		}
