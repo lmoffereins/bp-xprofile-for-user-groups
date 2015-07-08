@@ -17,7 +17,7 @@
  * Plugin Name:       BP XProfile For User Groups
  * Description:       Manage user group specific profile field(group)s in BuddyPress
  * Plugin URI:        https://github.com/lmoffereins/bp-xprofile-for-user-groups
- * Version:           1.1.1
+ * Version:           1.1.2
  * Author:            Laurens Offereins
  * Author URI:        https://github.com/lmoffereins
  * Text Domain:       bp-xprofile-for-user-groups
@@ -75,7 +75,7 @@ final class BP_XProfile_For_User_Groups {
 
 		/** Version **************************************************/
 
-		$this->version    = '1.1.1';
+		$this->version    = '1.1.2';
 
 		/** Plugin ***************************************************/
 
@@ -101,7 +101,7 @@ final class BP_XProfile_For_User_Groups {
 	 */
 	private function setup_actions() {
 
-		// Bail when BP < 2.1 or when the groups and xprofile component are not active
+		// Require BP 2.1 and both the Groups and XProfile components
 		if ( version_compare( buddypress()->version, '2.1', '<' ) || ! bp_is_active( 'groups' ) || ! bp_is_active( 'xprofile' ) )
 			return;
 
@@ -206,7 +206,7 @@ final class BP_XProfile_For_User_Groups {
 			foreach ( $objects as $item ) {
 
 				// Skip primary field(group)
-				if ( 1 == $item->object_id )
+				if ( 1 === $item->object_id )
 					continue;
 
 				// Skip if field is already hidden
@@ -278,7 +278,7 @@ final class BP_XProfile_For_User_Groups {
 		foreach ( $groups as $k => $group ) {
 
 			// Keep the primary fieldgroup
-			if ( 1 == $group->id )
+			if ( 1 === $group->id )
 				continue;
 
 			// Is displayed user not a member? Remove fieldgroup
@@ -318,7 +318,7 @@ final class BP_XProfile_For_User_Groups {
 	public function is_user_fieldgroup_member( $fieldgroup_id, $user_id = 0 ) {
 
 		// Bail if this is the primary fieldgroup
-		if ( 1 == $fieldgroup_id )
+		if ( 1 === $fieldgroup_id )
 			return true;
 
 		// Default to displayed user
@@ -367,7 +367,7 @@ final class BP_XProfile_For_User_Groups {
 	public function is_user_field_member( $field_id, $user_id = 0, $check_fieldgroup = true ) {
 
 		// Bail if this is the primary field
-		if ( 1 == $field_id || ( is_object( $field_id ) && 1 == $field_id->id ) )
+		if ( 1 === $field_id || ( is_object( $field_id ) && 1 === $field_id->id ) )
 			return true;
 
 		// Default to displayed user
@@ -437,7 +437,7 @@ final class BP_XProfile_For_User_Groups {
 	public function can_user_view_fieldgroup( $fieldgroup_id, $user_id = 0 ) {
 
 		// Bail if this is the primary fieldgroup
-		if ( 1 == $fieldgroup_id )
+		if ( 1 === $fieldgroup_id )
 			return true;
 
 		// Default to current user
@@ -491,7 +491,7 @@ final class BP_XProfile_For_User_Groups {
 	public function can_user_view_field( $field_id, $user_id = 0, $check_fieldgroup = true ) {
 
 		// Bail if this is the primary field
-		if ( 1 == $field_id || ( is_object( $field_id ) && 1 == $field_id->id ) )
+		if ( 1 === $field_id || ( is_object( $field_id ) && 1 === $field_id->id ) )
 			return true;
 
 		// Default to current user
@@ -708,7 +708,7 @@ final class BP_XProfile_For_User_Groups {
 	public function fieldgroup_display_metabox( $fieldgroup ) {
 
 		// The primary fieldgroup is for all, so bail
-		if ( 1 == $fieldgroup->id )
+		if ( 1 === $fieldgroup->id )
 			return;
 
 		// Setup user group query args
@@ -810,7 +810,7 @@ final class BP_XProfile_For_User_Groups {
 	public function field_display_metabox( $field ) {
 
 		// The primary field is for all, so bail
-		if ( 1 == $field->id )
+		if ( 1 === $field->id )
 			return;
 
 		// Query args for user groups from the parent field group
